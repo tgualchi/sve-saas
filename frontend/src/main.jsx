@@ -20,37 +20,29 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   async function validateDocument(e) {
-    e.preventDefault();
-    const normalized = normalizeCode(code);
+  e.preventDefault();
 
-    if (!normalized) {
-      setValidation({ type: "error", message: "Formato inválido. Use un código como CERT-2026-045." });
-      return;
-    }
+  const normalized = normalizeCode(code);
 
-    setLoading(true);
-    setValidation(null);
-
-    try {
-      const res = await fetch(`${API_URL}/api/certificates/${normalized}`);
-      const data = await res.json();
-
-      if (!res.ok) {
-        setValidation({ type: "error", message: data.error || "No se encontró el documento." });
-        return;
-      }
-
-      setValidation({ type: "success", certificate: data.certificate });
-    } catch (err) {
-      setValidation({
-        type: "error",
-        message: "No se pudo conectar con el servidor de validación. Intente nuevamente."
-      });
-    } finally {
-      setLoading(false);
-    }
+  if (!normalized) {
+    setValidation({
+      type: "error",
+      message: "Formato inválido. Use un código como CERT-2026-045."
+    });
+    return;
   }
 
+  setLoading(true);
+
+  setValidation({
+    type: "success",
+    message: "Código válido. Abriendo documento..."
+  });
+
+  setTimeout(() => {
+    window.location.href = `https://www.informespsicologicos.com/${normalized.toLowerCase()}`;
+  }, 1200);
+}
   async function createCheckout(planId) {
     try {
       const res = await fetch(`${API_URL}/api/payments/checkout`, {
