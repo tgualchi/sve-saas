@@ -23,13 +23,21 @@ const CONTACT_EMAIL =
   import.meta.env.VITE_CONTACT_EMAIL ||
   "sistemadevalidacionelectronica@gmail.com";
 
+const PUBLIC_CODE_PATTERN = /^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/;
+
 function normalizeCode(value) {
-  const clean = value.trim().toUpperCase();
-  const match = clean.match(/^CERT[\s-]?(\d{4})[\s-]?(\d{3})$/);
+  const clean = value.trim().toUpperCase().replace(/\s+/g, "-");
+  const compact = clean.replace(/-/g, "");
 
-  if (!match) return null;
+  if (PUBLIC_CODE_PATTERN.test(clean)) {
+    return clean;
+  }
 
-  return `CERT-${match[1]}-${match[2]}`;
+  if (/^[A-Z0-9]{16}$/.test(compact)) {
+    return compact.match(/.{1,4}/g).join("-");
+  }
+
+  return null;
 }
 
 function formatValidationDate() {
@@ -53,7 +61,8 @@ function App() {
       setValidation({
         type: "error",
         title: "Documento no validado",
-        message: "El código ingresado no tiene un formato válido.",
+        message:
+          "El código ingresado no tiene un formato válido. Use un código como A7KF-93XD-LP4Q-82WM.",
         code: code.trim() || "Sin código",
         validatedAt: formatValidationDate()
       });
@@ -67,12 +76,12 @@ function App() {
 
     setValidation({
       type: "success",
-      title: "Documento verificado",
+      title: "Documento auténtico",
       certificate: {
         code: normalized,
         status: "VÁLIDO",
         issuer: "InformesPsicologicos.com",
-        verifiedBy: "SVE",
+        verifiedBy: "Sistema de Validación Electrónica",
         validatedAt: formatValidationDate(),
         documentUrl: `https://www.informespsicologicos.com/${normalized.toLowerCase()}`
       }
@@ -142,7 +151,8 @@ function App() {
 
               <p className="lead">
                 SVE permite verificar certificados, informes y constancias mediante
-                código QR o código único, sin exponer datos sensibles del titular.
+                código QR o código único, sin exponer datos sensibles del titular ni
+                datos profesionales en la validación pública.
               </p>
 
               <div className="actions">
@@ -162,13 +172,13 @@ function App() {
 
               <div className="verified">
                 <CheckCircle />
-                Documento verificado
+                Documento auténtico
               </div>
 
               <div className="dataRows">
                 <div>
                   <span>Código</span>
-                  <strong>CERT-2026-045</strong>
+                  <strong>A7KF-93XD-LP4Q-82WM</strong>
                 </div>
 
                 <div>
@@ -177,8 +187,8 @@ function App() {
                 </div>
 
                 <div>
-                  <span>Emisor</span>
-                  <strong>InformesPsicologicos.com</strong>
+                  <span>Verificado por</span>
+                  <strong>SVE</strong>
                 </div>
               </div>
             </div>
@@ -191,8 +201,9 @@ function App() {
               <p className="kicker">Validación pública</p>
               <h2>Ingrese el código del documento</h2>
               <p className="muted">
-                El sistema mostrará únicamente el estado documental, el emisor y la
-                constancia de validación electrónica. No se exhiben datos del paciente.
+                La validación pública confirma la autenticidad del documento sin
+                mostrar nombre del paciente, DNI, profesional, matrícula, diagnóstico
+                ni contenido clínico. Esa información solo aparece dentro del documento original.
               </p>
             </div>
 
@@ -204,7 +215,7 @@ function App() {
                   id="validation-code"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
-                  placeholder="CERT-2026-045"
+                  placeholder="A7KF-93XD-LP4Q-82WM"
                   autoComplete="off"
                   disabled={loading}
                 />
@@ -231,7 +242,7 @@ function App() {
                   </div>
                   <div>
                     <strong>Consultando registro documental</strong>
-                    <p>Verificando código, estado y emisor autorizado.</p>
+                    <p>Verificando código público, estado y entidad emisora.</p>
                   </div>
                 </div>
               )}
@@ -253,25 +264,25 @@ function App() {
         <section id="seguridad" className="section dark">
           <div className="container">
             <p className="kicker">Seguridad</p>
-            <h2>Diseñado para reducir falsificaciones y mejorar la trazabilidad.</h2>
+            <h2>Diseñado para reducir falsificaciones y proteger datos sensibles.</h2>
 
             <div className="featureGrid">
               <Feature
                 icon={<ShieldCheck />}
-                title="Estados documentales"
-                text="Válido, revocado, expirado o en revisión."
+                title="Validación pública segura"
+                text="La consulta pública confirma autenticidad sin exponer datos personales ni profesionales."
               />
 
               <Feature
                 icon={<FileCheck />}
-                title="Base de datos"
-                text="Certificados registrados en Supabase/PostgreSQL."
+                title="Código no correlativo"
+                text="Cada documento usa un código público aleatorio, difícil de adivinar o enumerar."
               />
 
               <Feature
                 icon={<Building2 />}
-                title="Multiinstitución"
-                text="Preparado para profesionales, centros e instituciones."
+                title="Documento separado"
+                text="El contenido completo se visualiza únicamente desde el documento original validado."
               />
             </div>
           </div>
@@ -358,7 +369,7 @@ function App() {
 
       <footer>
         <div className="container footer">
-          © 2026 SVE · Sistema de Validación Electrónica · v1.0.0
+          © 2026 SVE · Sistema de Validación Electrónica · v1.1.0
         </div>
       </footer>
     </>
@@ -374,20 +385,25 @@ function VerifiedDocumentCard({ certificate, onReset }) {
         </div>
 
         <div>
-          <p className="eyebrow">Documento Verificado</p>
-          <h3>La validación electrónica fue exitosa.</h3>
+          <p className="eyebrow">Documento auténtico</p>
+          <h3>Este documento fue verificado correctamente por SVE.</h3>
         </div>
       </div>
 
       <div className="verificationGrid">
-        <ValidationRow label="Código del documento" value={certificate.code} />
+        <ValidationRow label="Código" value={certificate.code} />
         <ValidationRow label="Estado" value={certificate.status} highlight />
-        <ValidationRow label="Emisor" value={certificate.issuer} />
+        <ValidationRow label="Emitido por" value={certificate.issuer} />
         <ValidationRow label="Verificado por" value={certificate.verifiedBy} />
         <ValidationRow
           label="Fecha y hora de validación"
           value={certificate.validatedAt}
         />
+      </div>
+
+      <div className="privacyNotice">
+        La validación pública no muestra datos del paciente, profesional, matrícula,
+        diagnóstico ni contenido del documento.
       </div>
 
       <div className="verificationActions">
@@ -399,7 +415,7 @@ function VerifiedDocumentCard({ certificate, onReset }) {
             rel="noreferrer"
           >
             <ExternalLink size={18} />
-            Abrir documento original
+            Ver documento original
           </a>
         )}
 
@@ -421,7 +437,7 @@ function InvalidDocumentCard({ validation, onReset }) {
         </div>
 
         <div>
-          <p className="eyebrow">Documento No Validado</p>
+          <p className="eyebrow">Documento no validado</p>
           <h3>No fue posible validar el documento.</h3>
         </div>
       </div>
@@ -429,7 +445,7 @@ function InvalidDocumentCard({ validation, onReset }) {
       <div className="verificationGrid">
         <ValidationRow label="Código ingresado" value={validation.code} />
         <ValidationRow label="Estado" value="NO VALIDADO" danger />
-        <ValidationRow label="Verificado por" value="SVE" />
+        <ValidationRow label="Verificado por" value="Sistema de Validación Electrónica" />
         <ValidationRow
           label="Fecha y hora de validación"
           value={validation.validatedAt}
