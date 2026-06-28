@@ -49,7 +49,7 @@ function App() {
   });
 
   setLoading(false);
-}
+
 }
   async function createCheckout(planId) {
     try {
