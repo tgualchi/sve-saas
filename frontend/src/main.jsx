@@ -52,43 +52,77 @@ function App() {
   const [validation, setValidation] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  async function validateDocument(e) {
-    e.preventDefault();
+ async function validateDocument(e) {
+  e.preventDefault();
 
-    const normalized = normalizeCode(code);
+  const normalized = normalizeCode(code);
 
-    if (!normalized) {
+  if (!normalized) {
+    setValidation({
+      type: "error",
+      title: "Documento no encontrado",
+      message: "El código ingresado no corresponde a un documento válido.",
+      code: code.trim() || "-",
+      validatedAt: formatValidationDate()
+    });
+    return;
+  }
+
+  setLoading(true);
+  setValidation(null);
+
+  try {
+    const response = await fetch(`${API_URL}/api/validate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        code: normalized
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.valid) {
       setValidation({
         type: "error",
-        title: "Documento no validado",
+        title: "Documento no encontrado",
         message:
-          "El código ingresado no tiene un formato válido. Use un código como A7KF-93XD-LP4Q-82WM.",
-        code: code.trim() || "Sin código",
+          data.message ||
+          "El documento no existe o fue eliminado del sistema.",
+        code: normalized,
         validatedAt: formatValidationDate()
       });
+
       return;
     }
-
-    setLoading(true);
-    setValidation(null);
-
-    await new Promise((resolve) => setTimeout(resolve, 1100));
 
     setValidation({
       type: "success",
       title: "Documento auténtico",
       certificate: {
-        code: normalized,
-        status: "VÁLIDO",
-        issuer: "InformesPsicologicos.com",
+        code: data.code,
+        status: data.status,
+        issuer: data.issuer,
         verifiedBy: "Sistema de Validación Electrónica",
         validatedAt: formatValidationDate(),
-        documentUrl: `https://www.informespsicologicos.com/${normalized.toLowerCase()}`
+        documentUrl: data.documentUrl
       }
     });
-
+  } catch (error) {
+    setValidation({
+      type: "error",
+      title: "Error de conexión",
+      message:
+        "No fue posible comunicarse con el servidor de validación.",
+      code: normalized,
+      validatedAt: formatValidationDate()
+    });
+  } finally {
     setLoading(false);
   }
+}
 
   function resetValidation() {
     setCode("");

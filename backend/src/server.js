@@ -63,6 +63,31 @@ app.get("/api/certificates/:code", async (req, res) => {
   res.json({ certificate: data });
 });
 
+app.post("/api/validate", async (req, res) => {
+  const code = String(req.body.code || "").toUpperCase();
+
+  const { data, error } = await supabase
+    .from("certificates")
+    .select("*")
+    .eq("code", code)
+    .single();
+
+  if (error || !data) {
+    return res.json({
+      valid: false,
+      message: "Documento no encontrado."
+    });
+  }
+
+  return res.json({
+    valid: true,
+    code: data.code,
+    status: data.status,
+    issuer: data.issuer,
+    documentUrl: data.document_url
+  });
+});
+
 app.post("/api/payments/checkout", async (req, res) => {
   const { planId } = req.body;
   const plan = plans[planId];
