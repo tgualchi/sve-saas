@@ -27,14 +27,24 @@ const PUBLIC_CODE_PATTERN = /^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/;
 
 function normalizeCode(value) {
   const clean = value.trim().toUpperCase().replace(/\s+/g, "-");
-  const compact = clean.replace(/-/g, "");
 
+  // Nuevo formato
   if (PUBLIC_CODE_PATTERN.test(clean)) {
     return clean;
   }
 
+  // Permite escribir el código sin guiones
+  const compact = clean.replace(/-/g, "");
+
   if (/^[A-Z0-9]{16}$/.test(compact)) {
-    return compact.match(/.{1,4}/g).join("-");
+    return compact.match(/.{4}/g).join("-");
+  }
+
+  // Compatibilidad con certificados existentes
+  const certMatch = clean.match(/^CERT[\s-]?(\d{4})[\s-]?(\d{3})$/);
+
+  if (certMatch) {
+    return `CERT-${certMatch[1]}-${certMatch[2]}`;
   }
 
   return null;
