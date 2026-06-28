@@ -34,14 +34,22 @@ function App() {
 
   setLoading(true);
 
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
   setValidation({
     type: "success",
-    message: "Código válido. Abriendo documento..."
+    certificate: {
+      code: normalized,
+      status: "VÁLIDO",
+      issuer: "InformesPsicologicos.com",
+      issued_at: new Date().toLocaleDateString("es-AR"),
+      holder_name: "Documento verificado",
+      document_url: `https://www.informespsicologicos.com/${normalized.toLowerCase()}`
+    }
   });
 
-  setTimeout(() => {
-    window.location.href = `https://www.informespsicologicos.com/${normalized.toLowerCase()}`;
-  }, 1200);
+  setLoading(false);
+}
 }
   async function createCheckout(planId) {
     try {
