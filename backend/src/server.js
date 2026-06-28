@@ -69,7 +69,7 @@ app.post("/api/validate", async (req, res) => {
   const { data, error } = await supabase
     .from("certificates")
     .select("*")
-    .eq("code", code)
+    .or(`public_code.eq.${code},code.eq.${code}`)
     .single();
 
   if (error || !data) {
@@ -81,7 +81,7 @@ app.post("/api/validate", async (req, res) => {
 
   return res.json({
     valid: true,
-    code: data.code,
+    code: data.public_code || data.code,
     status: data.status,
     issuer: data.issuer,
     documentUrl: data.document_url
