@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
+  BrowserRouter,
+  Routes,
+  Route
+} from "react-router-dom";
+import {
   CheckCircle,
   ShieldCheck,
   QrCode,
@@ -551,4 +556,10 @@ function Plan({ name, price, items, planId, onCheckout, featured }) {
   );
 }
 
-createRoot(document.getElementById("root")).render(<App />);
+createRoot(document.getElementById("root")).render(
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<App />} />
+    </Routes>
+  </BrowserRouter>
+);
