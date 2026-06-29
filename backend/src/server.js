@@ -96,6 +96,8 @@ app.post("/api/validate", async (req, res) => {
     });
   }
 
+   console.log(data);
+
   return res.json({
     valid: true,
     code: data.public_code || data.code,
