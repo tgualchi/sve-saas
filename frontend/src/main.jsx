@@ -556,10 +556,23 @@ function Plan({ name, price, items, planId, onCheckout, featured }) {
   );
 }
 
+function DocumentPage() {
+  return (
+    <div style={{ padding: "60px", textAlign: "center" }}>
+      <h1>Documento SVE</h1>
+
+      <p>Esta página mostrará el documento completo.</p>
+
+      <p>Próximamente reemplazará Google Sites.</p>
+    </div>
+  );
+}
+
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<App />} />
-    </Routes>
+  <Route path="/" element={<App />} />
+  <Route path="/d/:code" element={<DocumentPage />} />
+</Routes>
   </BrowserRouter>
 );
