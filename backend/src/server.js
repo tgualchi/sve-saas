@@ -83,11 +83,25 @@ app.get("/api/certificates/:code", async (req, res) => {
 app.post("/api/validate", async (req, res) => {
   const code = String(req.body.code || "").toUpperCase();
 
-  const { data, error } = await supabase
-    .from("certificates")
-    .select("*")
-    .or(`public_code.eq.${code},code.eq.${code}`)
-    .single();
+ const { data, error } = await supabase
+  .from("certificates")
+  .select(`
+    *,
+    professional:professionals (
+      id,
+      full_name,
+      profession,
+      license_number,
+      specialty,
+      email,
+      phone,
+      website,
+      logo_url,
+      signature_url
+    )
+  `)
+  .or(`public_code.eq.${code},code.eq.${code}`)
+  .single();
 
   if (error || !data) {
     return res.json({
@@ -99,12 +113,27 @@ app.post("/api/validate", async (req, res) => {
    console.log(data);
 
   return res.json({
-    valid: true,
-    code: data.public_code || data.code,
-    status: data.status,
-    issuer: data.issuer,
-    documentUrl: data.document_url
-  });
+  valid: true,
+  code: data.public_code || data.code,
+  status: data.status,
+  issuer: data.issuer,
+  documentUrl: data.document_url,
+
+  professional: data.professional
+    ? {
+        id: data.professional.id,
+        fullName: data.professional.full_name,
+        profession: data.professional.profession,
+        licenseNumber: data.professional.license_number,
+        specialty: data.professional.specialty,
+        email: data.professional.email,
+        phone: data.professional.phone,
+        website: data.professional.website,
+        logoUrl: data.professional.logo_url,
+        signatureUrl: data.professional.signature_url
+      }
+    : null
+});
 });
 
 app.post("/api/payments/checkout", async (req, res) => {
