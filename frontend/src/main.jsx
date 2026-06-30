@@ -460,7 +460,7 @@ function VerifiedDocumentCard({ certificate, onReset }) {
         {certificate.documentUrl && (
           <a
             className="btn primary"
-            href={certificate.documentUrl}
+           href={`/d/${certificate.code}`}
             target="_blank"
             rel="noreferrer"
           >
