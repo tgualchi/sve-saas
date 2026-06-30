@@ -613,14 +613,113 @@ function DocumentPage() {
   }
 
   return (
-    <div style={{ padding: "60px" }}>
-      <h1>Documento SVE</h1>
+  <div
+    style={{
+      maxWidth: "900px",
+      margin: "40px auto",
+      fontFamily: "Arial, sans-serif",
+      background: "#fff",
+      border: "1px solid #e5e7eb",
+      borderRadius: "12px",
+      padding: "30px",
+      boxShadow: "0 2px 8px rgba(0,0,0,.08)"
+    }}
+  >
+    <div style={{ textAlign: "center" }}>
+      <h2
+        style={{
+          marginTop: 0,
+          marginBottom: "15px",
+          color: "#1f2937",
+          fontSize: "32px",
+          fontWeight: 700
+        }}
+      >
+        Validación de Documento Profesional
+      </h2>
 
-      <p><strong>Código:</strong> {documentData.code}</p>
-      <p><strong>Estado:</strong> {documentData.status}</p>
-      <p><strong>Emisor:</strong> {documentData.issuer}</p>
+      <img
+        src="https://i.ibb.co/zVzzjG4L/Dise-o-sin-t-tulo-6.png"
+        alt="QR"
+        style={{
+          width: "180px",
+          border: "1px solid #e5e7eb",
+          borderRadius: "12px",
+          padding: "10px",
+          background: "#fff"
+        }}
+      />
+
+      <div
+        style={{
+          marginTop: "10px",
+          fontWeight: "bold",
+          color: "#6b7280"
+        }}
+      >
+        {documentData.code}
+      </div>
+
+      <div
+        style={{
+          fontSize: "12px",
+          color: "#9ca3af",
+          marginTop: "4px",
+          marginBottom: "25px"
+        }}
+      >
+        Escanee para verificar la autenticidad del documento
+      </div>
     </div>
-  );
+
+    <div
+      style={{
+        background: "#ecfdf5",
+        border: "1px solid #10b981",
+        borderRadius: "8px",
+        padding: "14px",
+        textAlign: "center",
+        marginBottom: "25px"
+      }}
+    >
+      <strong
+        style={{
+          color: "#059669",
+          fontSize: "16px"
+        }}
+      >
+        ✅ DOCUMENTO VÁLIDO Y VERIFICADO
+      </strong>
+    </div>
+
+    <div
+      style={{
+        display: "flex",
+        gap: "20px",
+        flexWrap: "wrap"
+      }}
+    >
+      <div style={{ flex: 1, minWidth: "250px" }}>
+        <h3
+          style={{
+            borderBottom: "1px solid #ddd",
+            paddingBottom: "8px"
+          }}
+        >
+          Profesional Responsable
+        </h3>
+
+        <p>
+          <strong>{documentData.professional?.fullName}</strong>
+          <br />
+          {documentData.professional?.profession}
+          <br />
+          {documentData.professional?.licenseNumber}
+        </p>
+      </div>
+    </div>
+  </div>
+);
 }
 
 createRoot(document.getElementById("root")).render(
