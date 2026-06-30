@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   BrowserRouter,
   Routes,
-  Route
+  Route,
+  useParams
 } from "react-router-dom";
 import {
   CheckCircle,
@@ -557,13 +558,67 @@ function Plan({ name, price, items, planId, onCheckout, featured }) {
 }
 
 function DocumentPage() {
+  const { code } = useParams();
+
+  const [documentData, setDocumentData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadDocument() {
+      try {
+        const response = await fetch(`${API_URL}/api/validate`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            code
+          })
+        });
+
+        const data = await response.json();
+
+        console.log(response.status);
+        console.log(data);
+
+        if (data.valid) {
+          setDocumentData(data);
+        } else {
+          setDocumentData(null);
+        }
+      } catch (error) {
+        setDocumentData(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadDocument();
+  }, [code]);
+
+  if (loading) {
+    return (
+      <div style={{ padding: "60px", textAlign: "center" }}>
+        Cargando documento...
+      </div>
+    );
+  }
+
+  if (!documentData) {
+    return (
+      <div style={{ padding: "60px", textAlign: "center" }}>
+        Documento no encontrado.
+      </div>
+    );
+  }
+
   return (
-    <div style={{ padding: "60px", textAlign: "center" }}>
+    <div style={{ padding: "60px" }}>
       <h1>Documento SVE</h1>
 
-      <p>Esta página mostrará el documento completo.</p>
-
-      <p>Próximamente reemplazará Google Sites.</p>
+      <p><strong>Código:</strong> {documentData.code}</p>
+      <p><strong>Estado:</strong> {documentData.status}</p>
+      <p><strong>Emisor:</strong> {documentData.issuer}</p>
     </div>
   );
 }
