@@ -58,6 +58,89 @@ function getStatus(status) {
   }
 }
 
+function Header({ code }) {
+  return (
+    <div style={{ textAlign: "center" }}>
+      <h2
+        style={{
+          marginTop: 0,
+          marginBottom: "15px",
+          color: "#1f2937",
+          fontSize: "32px",
+          fontWeight: 700
+        }}
+      >
+        Validación de Documento Profesional
+      </h2>
+
+      <img
+        src="https://i.ibb.co/zVzzjG4L/Dise-o-sin-t-tulo-6.png"
+        alt="QR"
+        style={{
+          width: "180px",
+          border: "1px solid #e5e7eb",
+          borderRadius: "12px",
+          padding: "10px",
+          background: "#fff"
+        }}
+      />
+
+      <div
+        style={{
+          marginTop: "10px",
+          fontWeight: "bold",
+          color: "#6b7280"
+        }}
+      >
+        {code}
+      </div>
+
+      <div
+        style={{
+          marginTop: "4px",
+          marginBottom: "25px",
+          fontSize: "12px",
+          color: "#9ca3af"
+        }}
+      >
+        Escanee para verificar la autenticidad del documento
+      </div>
+    </div>
+  );
+}
+
+function StatusBanner({ status }) {
+
+  const config = getStatus(status);
+
+  return (
+
+    <div
+      style={{
+        background: config.background,
+        border: `1px solid ${config.border}`,
+        borderRadius: "8px",
+        padding: "14px",
+        textAlign: "center",
+        marginBottom: "25px"
+      }}
+    >
+
+      <strong
+        style={{
+          color: config.color,
+          fontSize: "16px"
+        }}
+      >
+        ✅ {config.text}
+      </strong>
+
+    </div>
+
+  );
+
+}
+
 export default function DocumentTemplate({ documentData }) {
 
   const professional = documentData?.professional || {};
@@ -69,74 +152,9 @@ export default function DocumentTemplate({ documentData }) {
   return (
     <div style={cardStyle}>
 
-      <div style={{ textAlign: "center" }}>
+      <Header code={documentData.code} />
 
-        <h2
-          style={{
-            marginTop: 0,
-            marginBottom: "15px",
-            color: "#1f2937",
-            fontSize: "32px",
-            fontWeight: 700
-          }}
-        >
-          Validación de Documento Profesional
-        </h2>
-
-        <img
-          src="https://i.ibb.co/zVzzjG4L/Dise-o-sin-t-tulo-6.png"
-          alt="QR"
-          style={{
-            width: "180px",
-            border: "1px solid #e5e7eb",
-            borderRadius: "12px",
-            padding: "10px",
-            background: "#fff"
-          }}
-        />
-
-        <div
-          style={{
-            marginTop: "10px",
-            fontWeight: "bold",
-            color: "#6b7280"
-          }}
-        >
-          {documentData.code}
-        </div>
-
-        <div
-          style={{
-            marginTop: "4px",
-            marginBottom: "25px",
-            fontSize: "12px",
-            color: "#9ca3af"
-          }}
-        >
-          Escanee para verificar la autenticidad del documento
-        </div>
-
-      </div>
-
-      <div
-        style={{
-          background: status.background,
-          border: `1px solid ${status.border}`,
-          borderRadius: "8px",
-          padding: "14px",
-          textAlign: "center",
-          marginBottom: "25px"
-        }}
-      >
-        <strong
-          style={{
-            color: status.color,
-            fontSize: "16px"
-          }}
-        >
-          ✅ {status.text}
-        </strong>
-      </div>
+      <StatusBanner status={documentData.status} />
 
       <div
         style={{
