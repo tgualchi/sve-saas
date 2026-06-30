@@ -112,11 +112,14 @@ app.post("/api/validate", async (req, res) => {
 
    console.log(data);
 
-  return res.json({
+return res.json({
   valid: true,
+
   code: data.public_code || data.code,
+  legacyCode: data.code,
   status: data.status,
   issuer: data.issuer,
+  issuedAt: data.issued_at,
   documentUrl: data.document_url,
 
   professional: data.professional
@@ -132,7 +135,24 @@ app.post("/api/validate", async (req, res) => {
         logoUrl: data.professional.logo_url,
         signatureUrl: data.professional.signature_url
       }
-    : null
+    : null,
+
+  patient: {
+    fullName: data.patient_full_name || data.holder_name || "",
+    dni: data.patient_dni || "",
+    birthDate: data.patient_birth_date || "",
+    age: data.patient_age || ""
+  },
+
+  document: {
+    type: data.document_type || "",
+    diagnosis: data.diagnosis || "",
+    treatment: data.treatment || "",
+    licenseFrom: data.license_from || "",
+    licenseTo: data.license_to || "",
+    body: data.document_body || "",
+    observations: data.observations || ""
+  }
 });
 });
 
