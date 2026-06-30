@@ -63,6 +63,16 @@ function formatValidationDate() {
   }).format(new Date());
 }
 
+function formatDate(date) {
+  if (!date) return "-";
+
+  return new Date(date).toLocaleDateString("es-AR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  });
+}
+
 function App() {
   const [code, setCode] = useState("");
   const [validation, setValidation] = useState(null);
@@ -738,28 +748,51 @@ function DocumentPage() {
     }}
   >
     <h3
-      style={{
-        borderBottom: "1px solid #ddd",
-        paddingBottom: "8px"
-      }}
-    >
-      Datos del Paciente
-    </h3>
+  style={{
+    borderBottom: "1px solid #ddd",
+    paddingBottom: "8px"
+  }}
+>
+  Datos del Paciente
+</h3>
 
-    <p>
-      <strong>Nombre:</strong> {documentData.patient?.fullName}
-      <br />
+<p>
+  <strong>Nombre:</strong> {documentData.patient?.fullName}
+  <br />
 
-      <strong>DNI:</strong> {documentData.patient?.dni}
-      <br />
+  <strong>DNI:</strong> {documentData.patient?.dni}
+  <br />
 
-      <strong>Fecha de nacimiento:</strong>{" "}
-      {documentData.patient?.birthDate}
-      <br />
+  <strong>Fecha de nacimiento:</strong>{" "}
+{formatDate(documentData.patient?.birthDate)}
+  <br />
 
-      <strong>Edad:</strong> {documentData.patient?.age} años
-    </p>
-  </div>
+  <strong>Edad:</strong> {documentData.patient?.age} años
+</p>
+
+</div> {/* ← Acá termina la columna del paciente */}
+
+</div> {/* ← Acá termina el display:flex */}
+
+<div style={{ marginTop: "25px" }}>
+  <h3
+    style={{
+      borderBottom: "1px solid #ddd",
+      paddingBottom: "8px"
+    }}
+  >
+    Datos del Informe o Certificado
+  </h3>
+
+  <p>
+    <strong>Código:</strong> {documentData.code}
+    <br />
+
+    <strong>Fecha de emisión:</strong> {formatDate(documentData.issuedAt)}
+    <br />
+
+    <strong>Tipo:</strong> {documentData.document?.type || "-"}
+  </p>
 </div>
     </div>
   </div>
