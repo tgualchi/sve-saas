@@ -18,9 +18,7 @@ export default function DocumentPage() {
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({
-            code
-          })
+          body: JSON.stringify({ code })
         });
 
         const data = await response.json();
@@ -30,8 +28,8 @@ export default function DocumentPage() {
         } else {
           setDocumentData(null);
         }
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        console.error("Error al cargar el documento:", error);
         setDocumentData(null);
       } finally {
         setLoading(false);
@@ -47,7 +45,8 @@ export default function DocumentPage() {
         style={{
           padding: "60px",
           textAlign: "center",
-          fontFamily: "Arial"
+          fontFamily: "Arial, sans-serif",
+          fontSize: "18px"
         }}
       >
         Cargando documento...
@@ -61,7 +60,9 @@ export default function DocumentPage() {
         style={{
           padding: "60px",
           textAlign: "center",
-          fontFamily: "Arial"
+          fontFamily: "Arial, sans-serif",
+          fontSize: "18px",
+          color: "#dc2626"
         }}
       >
         Documento no encontrado.
