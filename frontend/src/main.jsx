@@ -699,24 +699,68 @@ function DocumentPage() {
         flexWrap: "wrap"
       }}
     >
-      <div style={{ flex: 1, minWidth: "250px" }}>
-        <h3
-          style={{
-            borderBottom: "1px solid #ddd",
-            paddingBottom: "8px"
-          }}
-        >
-          Profesional Responsable
-        </h3>
+      <div
+  style={{
+    display: "flex",
+    justifyContent: "space-between",
+    gap: "20px",
+    flexWrap: "wrap"
+  }}
+>
+  <div
+    style={{
+      flex: 1,
+      minWidth: "250px"
+    }}
+  >
+    <h3
+      style={{
+        borderBottom: "1px solid #ddd",
+        paddingBottom: "8px"
+      }}
+    >
+      Profesional Responsable
+    </h3>
 
-        <p>
-          <strong>{documentData.professional?.fullName}</strong>
-          <br />
-          {documentData.professional?.profession}
-          <br />
-          {documentData.professional?.licenseNumber}
-        </p>
-      </div>
+    <p>
+      <strong>{documentData.professional?.fullName}</strong>
+      <br />
+      {documentData.professional?.profession}
+      <br />
+      {documentData.professional?.licenseNumber}
+    </p>
+  </div>
+
+  <div
+    style={{
+      flex: 1,
+      minWidth: "250px"
+    }}
+  >
+    <h3
+      style={{
+        borderBottom: "1px solid #ddd",
+        paddingBottom: "8px"
+      }}
+    >
+      Datos del Paciente
+    </h3>
+
+    <p>
+      <strong>Nombre:</strong> {documentData.patient?.fullName}
+      <br />
+
+      <strong>DNI:</strong> {documentData.patient?.dni}
+      <br />
+
+      <strong>Fecha de nacimiento:</strong>{" "}
+      {documentData.patient?.birthDate}
+      <br />
+
+      <strong>Edad:</strong> {documentData.patient?.age} años
+    </p>
+  </div>
+</div>
     </div>
   </div>
 );
