@@ -23,6 +23,10 @@ import {
 } from "lucide-react";
 import "./styles.css";
 import DocumentPage from "./pages/DocumentPage";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 const WHATSAPP = import.meta.env.VITE_WHATSAPP_NUMBER || "5491124028499";
@@ -569,10 +573,30 @@ function Plan({ name, price, items, planId, onCheckout, featured }) {
 }
 
 createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
-    <Routes>
-  <Route path="/" element={<App />} />
-  <Route path="/d/:code" element={<DocumentPage />} />
-</Routes>
-  </BrowserRouter>
+  <AuthProvider>
+    <BrowserRouter>
+      <Routes>
+
+        {/* Sitio público */}
+        <Route path="/" element={<App />} />
+
+        {/* Documento público */}
+        <Route path="/d/:code" element={<DocumentPage />} />
+
+        {/* Login */}
+        <Route path="/login" element={<Login />} />
+
+        {/* Dashboard protegido */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+      </Routes>
+    </BrowserRouter>
+  </AuthProvider>
 );
