@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 4000;
 
 const allowedOrigins = [
   "http://localhost:5173",
+  "https://urban-tribble-q5vqxgjqgv6h94x7-5173.app.github.dev",
   "https://sve-saas.vercel.app",
   "https://sve.informespsicologicos.com"
 ];
