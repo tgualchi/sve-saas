@@ -4,7 +4,7 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  useParams
+  Link
 } from "react-router-dom";
 import {
   CheckCircle,
@@ -199,12 +199,24 @@ function App() {
             </div>
           </a>
 
-          <nav>
-            <a href="#validar">Validar</a>
-            <a href="#seguridad">Seguridad</a>
-            <a href="#planes">Planes</a>
-            <a href="#contacto">Contacto</a>
-          </nav>
+         <nav>
+  <a href="#validar">Validar</a>
+  <a href="#seguridad">Seguridad</a>
+  <a href="#planes">Planes</a>
+  <a href="#contacto">Contacto</a>
+
+  <Link
+    to="/login"
+    style={{
+      marginLeft: 20,
+      color: "#2563eb",
+      fontWeight: "bold",
+      textDecoration: "none"
+    }}
+  >
+    Iniciar sesión
+  </Link>
+</nav>
         </div>
       </header>
 

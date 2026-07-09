@@ -89,21 +89,26 @@ export default function Dashboard() {
           <DashboardCard
             title="Nuevo Certificado"
             description="Emitir un nuevo certificado."
+            onClick={() => navigate("/patients")}
           />
+
 
           <DashboardCard
             title="Pacientes"
             description="Administrar pacientes."
+            onClick={() => navigate("/patients")}
           />
 
           <DashboardCard
             title="Certificados"
             description="Consultar documentos emitidos."
+            onClick={() => navigate("/documents")}
           />
 
           <DashboardCard
             title="Configuración"
             description="Datos del profesional."
+            onClick={() => navigate("/profile")}
           />
         </div>
       </div>
@@ -111,14 +116,17 @@ export default function Dashboard() {
   );
 }
 
-function DashboardCard({ title, description }) {
+function DashboardCard({ title, description, onClick }) {
   return (
     <div
+      onClick={onClick}
       style={{
         background: "#ffffff",
         padding: "25px",
         borderRadius: "12px",
-        boxShadow: "0 4px 12px rgba(0,0,0,.06)"
+        boxShadow: "0 4px 12px rgba(0,0,0,.06)",
+        cursor: "pointer",
+        transition: "0.2s"
       }}
     >
       <h3>{title}</h3>
