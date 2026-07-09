@@ -27,6 +27,11 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./contexts/AuthContext";
+import Profile from "./pages/Profile";
+import Patients from "./pages/patients/Patients";
+import Patient from "./pages/patients/Patient";
+import NewPatient from "./pages/patients/NewPatient";
+import NewDocument from "./pages/documents/NewDocument";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 const WHATSAPP = import.meta.env.VITE_WHATSAPP_NUMBER || "5491124028499";
@@ -586,7 +591,17 @@ createRoot(document.getElementById("root")).render(
         {/* Login */}
         <Route path="/login" element={<Login />} />
 
-        {/* Dashboard protegido */}
+         {/* Perfil Profesional */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Dashboard */}
         <Route
           path="/dashboard"
           element={
@@ -595,6 +610,43 @@ createRoot(document.getElementById("root")).render(
             </ProtectedRoute>
           }
         />
+
+        {/* Pacientes */}
+<Route
+  path="/patients"
+  element={
+    <ProtectedRoute>
+      <Patients />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/patients/new"
+  element={
+    <ProtectedRoute>
+      <NewPatient />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/patients/:id"
+  element={
+    <ProtectedRoute>
+      <Patient />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/documents/new/:patientId"
+  element={
+    <ProtectedRoute>
+      <NewDocument />
+    </ProtectedRoute>
+  }
+/>
 
       </Routes>
     </BrowserRouter>
