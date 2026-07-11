@@ -100,23 +100,44 @@ export default function Documents() {
   return (
     <main className="documents-page">
       <div className="documents-header">
-        <div>
-          <h1>Documentos</h1>
 
-          <p>
-            Total: {documents.length} documento
-            {documents.length !== 1 ? "s" : ""}
-          </p>
-        </div>
+  <div>
 
-        <button
-          type="button"
-          className="documents-back-button"
-          onClick={() => navigate("/dashboard")}
-        >
-          Volver al Dashboard
-        </button>
-      </div>
+    <span
+      style={{
+        color: "#2563eb",
+        fontWeight: 700,
+        textTransform: "uppercase",
+        letterSpacing: "1px",
+        fontSize: "13px"
+      }}
+    >
+      Gestión documental
+    </span>
+
+    <h1>Documentos</h1>
+
+    <p>
+      Administre todos los certificados e informes emitidos.
+      <br />
+      <strong>
+        {documents.length} documento
+        {documents.length !== 1 ? "s" : ""} registrado
+        {documents.length !== 1 ? "s" : ""}
+      </strong>
+    </p>
+
+  </div>
+
+  <button
+    type="button"
+    className="documents-back-button"
+    onClick={() => navigate("/dashboard")}
+  >
+    ← Dashboard
+  </button>
+
+</div>
 
       <div className="documents-search-wrapper">
         <input

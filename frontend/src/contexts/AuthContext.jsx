@@ -32,11 +32,16 @@ export function AuthProvider({ children }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const value = {
-    session,
-    user,
-    loading
-  };
+  async function signOut() {
+  await supabase.auth.signOut();
+}
+     
+ const value = {
+  session,
+  user,
+  loading,
+  signOut
+};
 
   return (
     <AuthContext.Provider value={value}>

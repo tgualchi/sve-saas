@@ -1,6 +1,7 @@
 import DashboardHeader from "../components/dashboard/DashboardHeader";
 import DashboardStats from "../components/dashboard/DashboardStats";
 import DashboardActions from "../components/dashboard/DashboardActions";
+import RecentDocuments from "../components/dashboard/RecentDocuments";
 
 import "./Dashboard.css";
 
@@ -16,7 +17,7 @@ export default function Dashboard() {
 
             <DashboardActions />
 
-                    <section className="dashboard-section">
+            <RecentDocuments />
 
             <div className="dashboard-section-header">
 
@@ -34,7 +35,7 @@ export default function Dashboard() {
 
             </div>
 
-        </section>
+        
 
         </div>
 

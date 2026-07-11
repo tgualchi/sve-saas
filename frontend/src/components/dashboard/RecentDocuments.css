@@ -1,0 +1,205 @@
+.recent-documents{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:35px;
+
+    margin-top:35px;
+
+    box-shadow:0 8px 30px rgba(15,23,42,.05);
+
+}
+
+.recent-documents-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+}
+
+.recent-documents-header h2{
+
+    margin:0;
+
+    color:#0f172a;
+
+    font-size:26px;
+
+    font-weight:700;
+
+}
+
+.recent-documents-header button{
+
+    border:none;
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:12px 20px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.recent-documents-header button:hover{
+
+    background:#1d4ed8;
+
+    transform:translateY(-2px);
+
+}
+
+.recent-documents-empty{
+
+    padding:60px;
+
+    text-align:center;
+
+    color:#94a3b8;
+
+    border:2px dashed #cbd5e1;
+
+    border-radius:14px;
+
+    font-size:17px;
+
+}
+
+.recent-documents-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.recent-documents-table thead{
+
+    background:#f8fafc;
+
+}
+
+.recent-documents-table th{
+
+    padding:18px;
+
+    text-align:left;
+
+    color:#64748b;
+
+    font-size:13px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.6px;
+
+    border-bottom:1px solid #e2e8f0;
+
+}
+
+.recent-documents-table td{
+
+    padding:18px;
+
+    border-bottom:1px solid #f1f5f9;
+
+    color:#334155;
+
+    font-size:15px;
+
+}
+
+.recent-documents-table tbody tr{
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.recent-documents-table tbody tr:hover{
+
+    background:#f8fafc;
+
+}
+
+.recent-documents-table tbody tr:last-child td{
+
+    border-bottom:none;
+
+}
+
+.recent-documents-table strong{
+
+    color:#2563eb;
+
+}
+
+.recent-status{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    min-width:90px;
+
+    padding:7px 12px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+
+}
+
+.recent-status.valid{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+.recent-status.invalid{
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+}
+
+@media(max-width:900px){
+
+    .recent-documents{
+
+        overflow-x:auto;
+
+    }
+
+    .recent-documents-table{
+
+        min-width:850px;
+
+    }
+
+}

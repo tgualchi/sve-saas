@@ -2,49 +2,71 @@ import "./DashboardHeader.css";
 import { useAuth } from "../../contexts/AuthContext";
 
 export default function DashboardHeader() {
-  const { user, signOut } = useAuth();
 
-  const hour = new Date().getHours();
+    const { user, signOut } = useAuth();
 
-  let greeting = "Buenas noches";
+    const hour = new Date().getHours();
 
-  if (hour >= 6 && hour < 12) greeting = "Buenos días";
-  else if (hour >= 12 && hour < 20) greeting = "Buenas tardes";
+    let greeting = "Buenas noches";
 
-  return (
-    <header className="dashboard-header">
+    if (hour >= 6 && hour < 12) greeting = "Buenos días";
+    else if (hour >= 12 && hour < 20) greeting = "Buenas tardes";
 
-      <div className="dashboard-header-left">
+    return (
 
-        <span className="dashboard-welcome">
-          {greeting}
-        </span>
+        <header className="dashboard-header">
 
-        <h1>
-          Bienvenido a SVE
-        </h1>
+            <div className="dashboard-header-left">
 
-        <p>
-          {user?.email}
-        </p>
+                <span className="dashboard-welcome">
 
-      </div>
+                    {greeting}
 
-      <div className="dashboard-header-right">
+                </span>
 
-        <button className="notification-button">
-          🔔
-        </button>
+                <h1>
 
-        <button
-          className="logout-button"
-          onClick={signOut}
-        >
-          Cerrar sesión
-        </button>
+                    Bienvenido a SVE
 
-      </div>
+                </h1>
 
-    </header>
-  );
+                <p>
+
+                    <strong>Sistema de Validación Electrónica</strong>
+
+                    <br />
+
+                    Administre pacientes, certificados e informes
+                    profesionales desde un único lugar.
+
+                    <br /><br />
+
+                    <strong>Usuario:</strong> {user?.email}
+
+                </p>
+
+            </div>
+
+            <div className="dashboard-header-right">
+
+                <button
+                    className="notification-button"
+                    title="Notificaciones"
+                >
+                    🔔
+                </button>
+
+                <button
+                    className="logout-button"
+                    onClick={signOut}
+                >
+                    Cerrar sesión
+                </button>
+
+            </div>
+
+        </header>
+
+    );
+
 }
