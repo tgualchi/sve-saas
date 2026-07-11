@@ -32,6 +32,9 @@ import Patients from "./pages/patients/Patients";
 import Patient from "./pages/patients/Patient";
 import NewPatient from "./pages/patients/NewPatient";
 import NewDocument from "./pages/documents/NewDocument";
+import Documents from "./pages/documents/Documents";
+import Document from "./pages/documents/Document";
+
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 const WHATSAPP = import.meta.env.VITE_WHATSAPP_NUMBER || "5491124028499";
@@ -643,6 +646,24 @@ createRoot(document.getElementById("root")).render(
 />
 
 <Route
+  path="/documents"
+  element={
+    <ProtectedRoute>
+      <Documents />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/documents/:id"
+  element={
+    <ProtectedRoute>
+      <Document />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
   path="/patients/:id"
   element={
     <ProtectedRoute>
@@ -650,6 +671,7 @@ createRoot(document.getElementById("root")).render(
     </ProtectedRoute>
   }
 />
+
 
 <Route
   path="/documents/new/:patientId"
