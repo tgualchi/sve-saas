@@ -13,17 +13,13 @@ export default function DocumentPage() {
   useEffect(() => {
     async function loadDocument() {
       try {
-        const response = await fetch(`${API_URL}/api/validate`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ code })
-        });
+        const response = await fetch(
+          `${API_URL}/api/documents/public/${encodeURIComponent(code)}`
+        );
 
         const data = await response.json();
 
-        if (data.valid) {
+        if (response.ok) {
           setDocumentData(data);
         } else {
           setDocumentData(null);

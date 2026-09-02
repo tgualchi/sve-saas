@@ -4,7 +4,7 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  Link
+  useParams
 } from "react-router-dom";
 import {
   CheckCircle,
@@ -28,13 +28,6 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./contexts/AuthContext";
 import Profile from "./pages/Profile";
-import Patients from "./pages/patients/Patients";
-import Patient from "./pages/patients/Patient";
-import NewPatient from "./pages/patients/NewPatient";
-import NewDocument from "./pages/documents/NewDocument";
-import Documents from "./pages/documents/Documents";
-import Document from "./pages/documents/Document";
-
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 const WHATSAPP = import.meta.env.VITE_WHATSAPP_NUMBER || "5491124028499";
@@ -123,6 +116,21 @@ function App() {
 
     const data = await response.json();
 
+    if (response.ok && data.found && !data.valid) {
+      setValidation({
+        type: "special",
+        certificate: {
+          code: data.code,
+          status: data.status,
+          issuer: data.issuer,
+          verifiedBy: "Sistema de Validación Electrónica",
+          validatedAt: formatValidationDate(),
+          documentUrl: data.documentUrl
+        }
+      });
+      return;
+    }
+
     if (!response.ok || !data.valid) {
       setValidation({
         type: "error",
@@ -202,24 +210,12 @@ function App() {
             </div>
           </a>
 
-         <nav>
-  <a href="#validar">Validar</a>
-  <a href="#seguridad">Seguridad</a>
-  <a href="#planes">Planes</a>
-  <a href="#contacto">Contacto</a>
-
-  <Link
-    to="/login"
-    style={{
-      marginLeft: 20,
-      color: "#2563eb",
-      fontWeight: "bold",
-      textDecoration: "none"
-    }}
-  >
-    Iniciar sesión
-  </Link>
-</nav>
+          <nav>
+            <a href="#validar">Validar</a>
+            <a href="#seguridad">Seguridad</a>
+            <a href="#planes">Planes</a>
+            <a href="#contacto">Contacto</a>
+          </nav>
         </div>
       </header>
 
@@ -334,6 +330,13 @@ function App() {
 
               {validation?.type === "success" && (
                 <VerifiedDocumentCard
+                  certificate={validation.certificate}
+                  onReset={resetValidation}
+                />
+              )}
+
+              {validation?.type === "special" && (
+                <SpecialStatusDocumentCard
                   certificate={validation.certificate}
                   onReset={resetValidation}
                 />
@@ -454,7 +457,7 @@ function App() {
 
       <footer>
         <div className="container footer">
-          © 2026 SVE · Sistema de Validación Electrónica · v1.1.0
+          © 2026 SVE · Sistema de Validación Electrónica · v1.1.1
         </div>
       </footer>
     </>
@@ -501,6 +504,65 @@ function VerifiedDocumentCard({ certificate, onReset }) {
           >
             <ExternalLink size={18} />
             Ver documento original
+          </a>
+        )}
+
+        <button type="button" className="btn secondary" onClick={onReset}>
+          <RotateCcw size={18} />
+          Validar otro documento
+        </button>
+      </div>
+    </article>
+  );
+}
+
+function SpecialStatusDocumentCard({ certificate, onReset }) {
+  const isRevoked = String(certificate.status).toLowerCase() === "revoked";
+  const statusLabel = isRevoked ? "REVOCADO" : "ANULADO";
+
+  return (
+    <article className="verificationCard invalidCard">
+      <div className="verificationHeader">
+        <div className="verificationIcon errorIcon">
+          <XCircle />
+        </div>
+
+        <div>
+          <p className="eyebrow">Documento registrado con estado especial</p>
+          <h3>Este documento no se encuentra válido ni vigente.</h3>
+        </div>
+      </div>
+
+      <div className="verificationGrid">
+        <ValidationRow label="Código" value={certificate.code} />
+        <ValidationRow label="Estado" value={statusLabel} danger />
+        <ValidationRow label="Emitido por" value={certificate.issuer} />
+        <ValidationRow label="Verificado por" value={certificate.verifiedBy} />
+        <ValidationRow
+          label="Fecha y hora de validación"
+          value={certificate.validatedAt}
+        />
+      </div>
+
+      <p className="invalidMessage">
+        El código existe en SVE, pero el documento fue {isRevoked ? "revocado" : "anulado"} y no debe aceptarse como válido.
+      </p>
+
+      <div className="privacyNotice">
+        La validación pública no muestra datos del paciente, profesional, matrícula,
+        diagnóstico ni contenido del documento.
+      </div>
+
+      <div className="verificationActions">
+        {certificate.documentUrl && (
+          <a
+            className="btn secondary"
+            href={`/d/${certificate.code}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <ExternalLink size={18} />
+            Ver documento con advertencia
           </a>
         )}
 
@@ -625,62 +687,6 @@ createRoot(document.getElementById("root")).render(
             </ProtectedRoute>
           }
         />
-
-        {/* Pacientes */}
-<Route
-  path="/patients"
-  element={
-    <ProtectedRoute>
-      <Patients />
-    </ProtectedRoute>
-  }
-/>
-
-<Route
-  path="/patients/new"
-  element={
-    <ProtectedRoute>
-      <NewPatient />
-    </ProtectedRoute>
-  }
-/>
-
-<Route
-  path="/documents"
-  element={
-    <ProtectedRoute>
-      <Documents />
-    </ProtectedRoute>
-  }
-/>
-
-<Route
-  path="/documents/:id"
-  element={
-    <ProtectedRoute>
-      <Document />
-    </ProtectedRoute>
-  }
-/>
-
-<Route
-  path="/patients/:id"
-  element={
-    <ProtectedRoute>
-      <Patient />
-    </ProtectedRoute>
-  }
-/>
-
-
-<Route
-  path="/documents/new/:patientId"
-  element={
-    <ProtectedRoute>
-      <NewDocument />
-    </ProtectedRoute>
-  }
-/>
 
       </Routes>
     </BrowserRouter>

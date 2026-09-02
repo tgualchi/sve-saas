@@ -48,6 +48,17 @@ function getStatus(status) {
         color: "#dc2626"
       };
 
+    case "anulado":
+    case "annulled":
+    case "canceled":
+    case "cancelled":
+      return {
+        text: "DOCUMENTO ANULADO",
+        background: "#fff7ed",
+        border: "#f97316",
+        color: "#c2410c"
+      };
+
     default:
       return {
         text: "DOCUMENTO",
@@ -132,7 +143,7 @@ function StatusBanner({ status }) {
           fontSize: "16px"
         }}
       >
-        ✅ {config.text}
+        {String(status).toLowerCase() === "valid" ? "✅" : "⚠️"} {config.text}
       </strong>
 
     </div>
@@ -148,6 +159,7 @@ export default function DocumentTemplate({ documentData }) {
   const documentInfo = documentData?.document || {};
 
   const status = getStatus(documentData?.status);
+  const isValid = String(documentData?.status).toLowerCase() === "valid";
 
   return (
     <div style={cardStyle}>
@@ -325,8 +337,8 @@ export default function DocumentTemplate({ documentData }) {
             <div
         style={{
           marginTop: "25px",
-          background: "#ecfdf5",
-          border: "1px solid #10b981",
+          background: status.background,
+          border: `1px solid ${status.border}`,
           borderRadius: "8px",
           padding: "18px"
         }}
@@ -335,26 +347,26 @@ export default function DocumentTemplate({ documentData }) {
           style={{
             marginTop: 0,
             marginBottom: "12px",
-            color: "#059669"
+            color: status.color
           }}
         >
-          ✅ Estado de Validación
+          {isValid ? "✅" : "⚠️"} Estado de Validación
         </h3>
 
         <p
           style={{
             marginBottom: 0,
-            color: "#065f46",
+            color: status.color,
             lineHeight: 1.6
           }}
         >
-          <strong>Documento válido y verificado.</strong>
+          <strong>{status.text}.</strong>
 
           <br />
 
-          La autenticidad e integridad del presente documento
-          han sido confirmadas mediante el Sistema de
-          Validación Electrónica (SVE).
+          {isValid
+            ? "La autenticidad e integridad del presente documento han sido confirmadas mediante el Sistema de Validación Electrónica (SVE)."
+            : "El documento existe en el registro de SVE, pero su estado actual impide considerarlo válido o vigente."}
 
           <br />
           <br />

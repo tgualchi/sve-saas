@@ -79,6 +79,43 @@ function calculateAge(birthDate) {
   return age;
 }
 
+function normalizeStatus(status) {
+  const normalized = String(status || "").trim().toLowerCase();
+
+  if (["valid", "validado", "válido", "valido", "active", "activo"].includes(normalized)) {
+    return "valid";
+  }
+
+  if (["revoked", "revocado", "revocada"].includes(normalized)) {
+    return "revoked";
+  }
+
+  if (["annulled", "canceled", "cancelled", "anulado", "anulada"].includes(normalized)) {
+    return "anulado";
+  }
+
+  return normalized || "unknown";
+}
+
+function isValidStatus(status) {
+  return normalizeStatus(status) === "valid";
+}
+
+function publicValidationResponse({ code, legacyCode = null, status, issuer, issuedAt }) {
+  const normalizedStatus = normalizeStatus(status);
+
+  return {
+    found: true,
+    valid: isValidStatus(normalizedStatus),
+    code,
+    legacyCode,
+    status: normalizedStatus,
+    issuer: issuer || "InformesPsicologicos.com",
+    issuedAt: issuedAt || null,
+    documentUrl: `/d/${encodeURIComponent(code)}`
+  };
+}
+
 app.get("/health", (_req, res) => {
   res.json({
     ok: true,
@@ -112,7 +149,9 @@ app.get("/api/certificates/:code", async (req, res) => {
   res.json({
     certificate: data
   });
-});app.post("/api/validate", async (req, res) => {
+});
+
+app.post("/api/validate", async (req, res) => {
   const code = String(req.body.code || "").trim().toUpperCase();
 
   /*
@@ -120,6 +159,65 @@ app.get("/api/certificates/:code", async (req, res) => {
    * NUEVO SISTEMA (documents)
    * ==========================================================
    */
+
+  const { data: document, error: documentError } = await supabase
+    .from("documents")
+    .select(`
+      public_code,
+      status,
+      issued_at,
+      professional:professionals(full_name)
+    `)
+    .eq("public_code", code)
+    .maybeSingle();
+
+  if (!documentError && document) {
+
+    const professional = document.professional;
+
+    return res.json(
+      publicValidationResponse({
+        code: document.public_code,
+        status: document.status,
+        issuer: professional?.full_name,
+        issuedAt: document.issued_at
+      })
+    );
+
+  }
+
+  /*
+   * ==========================================================
+   * SISTEMA ANTERIOR (certificates)
+   * ==========================================================
+   */
+
+  const { data, error } = await supabase
+    .from("certificates")
+    .select("public_code,code,status,issuer,issued_at")
+    .or(`public_code.eq.${code},code.eq.${code}`)
+    .maybeSingle();
+
+  if (error || !data) {
+
+    return res.json({ found: false, valid: false, message: "Documento no encontrado." });
+
+  }
+
+  return res.json(
+    publicValidationResponse({
+      code: data.public_code || data.code,
+      legacyCode: data.code,
+      status: data.status,
+      issuer: data.issuer,
+      issuedAt: data.issued_at
+    })
+  );
+
+});
+
+app.get("/api/documents/public/:code", async (req, res) => {
+  const code = String(req.params.code || "").trim().toUpperCase();
 
   const { data: document, error: documentError } = await supabase
     .from("documents")
@@ -132,28 +230,14 @@ app.get("/api/certificates/:code", async (req, res) => {
     .maybeSingle();
 
   if (!documentError && document) {
-
     const patient = document.patient;
     const professional = document.professional;
 
     return res.json({
-
-      valid: true,
-
       code: document.public_code,
-
       legacyCode: null,
-
-      status: document.status,
-
-      issuer:
-        professional?.full_name ||
-        "",
-
+      status: normalizeStatus(document.status),
       issuedAt: document.issued_at,
-
-      documentUrl: `/d/${document.public_code}`,
-
       professional: professional
         ? {
             id: professional.id,
@@ -168,7 +252,6 @@ app.get("/api/certificates/:code", async (req, res) => {
             signatureUrl: professional.signature_url
           }
         : null,
-
       patient: patient
         ? {
             fullName: patient.full_name,
@@ -177,7 +260,6 @@ app.get("/api/certificates/:code", async (req, res) => {
             age: calculateAge(patient.birth_date)
           }
         : null,
-
       document: {
         type: document.document_type,
         diagnosis: document.diagnosis,
@@ -185,66 +267,31 @@ app.get("/api/certificates/:code", async (req, res) => {
         observations: document.observations,
         licenseFrom: document.license_from,
         licenseTo: document.license_to,
-        body: ""
+        body: document.document_body || ""
       }
-
     });
-
   }
-
-  /*
-   * ==========================================================
-   * SISTEMA ANTERIOR (certificates)
-   * ==========================================================
-   */
 
   const { data, error } = await supabase
     .from("certificates")
     .select(`
       *,
-      professional:professionals(
-        id,
-        full_name,
-        profession,
-        license_number,
-        specialty,
-        email,
-        phone,
-        website,
-        logo_url,
-        signature_url
-      )
+      professional:professionals(*)
     `)
     .or(`public_code.eq.${code},code.eq.${code}`)
     .maybeSingle();
 
   if (error || !data) {
-
-    return res.json({
-
-      valid: false,
-
-      message: "Documento no encontrado."
-
-    });
-
+    return res.status(404).json({ error: "Documento no encontrado." });
   }
 
   return res.json({
-
-    valid: true,
-
     code: data.public_code || data.code,
-
     legacyCode: data.code,
-
-    status: data.status,
-
-    issuer: data.issuer,
-
+    status: normalizeStatus(data.status),
     issuedAt: data.issued_at,
-
-    documentUrl: data.document_url,    professional: data.professional
+    documentUrl: data.document_url || null,
+    professional: data.professional
       ? {
           id: data.professional.id,
           fullName: data.professional.full_name,
@@ -258,14 +305,12 @@ app.get("/api/certificates/:code", async (req, res) => {
           signatureUrl: data.professional.signature_url
         }
       : null,
-
     patient: {
       fullName: data.patient_full_name || data.holder_name || "",
       dni: data.patient_dni || "",
       birthDate: data.patient_birth_date || "",
       age: data.patient_age || ""
     },
-
     document: {
       type: data.document_type || "",
       diagnosis: data.diagnosis || "",
@@ -275,9 +320,7 @@ app.get("/api/certificates/:code", async (req, res) => {
       body: data.document_body || "",
       observations: data.observations || ""
     }
-
   });
-
 });
 
 app.post("/api/payments/checkout", async (req, res) => {
@@ -357,4 +400,3 @@ app.post("/api/payments/checkout", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`SVE API running on port ${PORT}`);
 });
-
