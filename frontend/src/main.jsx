@@ -4,7 +4,7 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  useParams
+  Link
 } from "react-router-dom";
 import {
   CheckCircle,
@@ -28,6 +28,13 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./contexts/AuthContext";
 import Profile from "./pages/Profile";
+import Patients from "./pages/patients/Patients";
+import Patient from "./pages/patients/Patient";
+import NewPatient from "./pages/patients/NewPatient";
+import NewDocument from "./pages/documents/NewDocument";
+import Documents from "./pages/documents/Documents";
+import Document from "./pages/documents/Document";
+
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 const WHATSAPP = import.meta.env.VITE_WHATSAPP_NUMBER || "5491124028499";
@@ -210,12 +217,24 @@ function App() {
             </div>
           </a>
 
-          <nav>
-            <a href="#validar">Validar</a>
-            <a href="#seguridad">Seguridad</a>
-            <a href="#planes">Planes</a>
-            <a href="#contacto">Contacto</a>
-          </nav>
+         <nav>
+  <a href="#validar">Validar</a>
+  <a href="#seguridad">Seguridad</a>
+  <a href="#planes">Planes</a>
+  <a href="#contacto">Contacto</a>
+
+  <Link
+    to="/login"
+    style={{
+      marginLeft: 20,
+      color: "#2563eb",
+      fontWeight: "bold",
+      textDecoration: "none"
+    }}
+  >
+    Iniciar sesión
+  </Link>
+</nav>
         </div>
       </header>
 
@@ -457,7 +476,7 @@ function App() {
 
       <footer>
         <div className="container footer">
-          © 2026 SVE · Sistema de Validación Electrónica · v1.1.1
+          © 2026 SVE · Sistema de Validación Electrónica · v1.1.2
         </div>
       </footer>
     </>
@@ -538,10 +557,7 @@ function SpecialStatusDocumentCard({ certificate, onReset }) {
         <ValidationRow label="Estado" value={statusLabel} danger />
         <ValidationRow label="Emitido por" value={certificate.issuer} />
         <ValidationRow label="Verificado por" value={certificate.verifiedBy} />
-        <ValidationRow
-          label="Fecha y hora de validación"
-          value={certificate.validatedAt}
-        />
+        <ValidationRow label="Fecha y hora de validación" value={certificate.validatedAt} />
       </div>
 
       <p className="invalidMessage">
@@ -555,12 +571,7 @@ function SpecialStatusDocumentCard({ certificate, onReset }) {
 
       <div className="verificationActions">
         {certificate.documentUrl && (
-          <a
-            className="btn secondary"
-            href={`/d/${certificate.code}`}
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a className="btn secondary" href={`/d/${certificate.code}`} target="_blank" rel="noreferrer">
             <ExternalLink size={18} />
             Ver documento con advertencia
           </a>
@@ -687,6 +698,62 @@ createRoot(document.getElementById("root")).render(
             </ProtectedRoute>
           }
         />
+
+        {/* Pacientes */}
+<Route
+  path="/patients"
+  element={
+    <ProtectedRoute>
+      <Patients />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/patients/new"
+  element={
+    <ProtectedRoute>
+      <NewPatient />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/documents"
+  element={
+    <ProtectedRoute>
+      <Documents />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/documents/:id"
+  element={
+    <ProtectedRoute>
+      <Document />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/patients/:id"
+  element={
+    <ProtectedRoute>
+      <Patient />
+    </ProtectedRoute>
+  }
+/>
+
+
+<Route
+  path="/documents/new/:patientId"
+  element={
+    <ProtectedRoute>
+      <NewDocument />
+    </ProtectedRoute>
+  }
+/>
 
       </Routes>
     </BrowserRouter>
