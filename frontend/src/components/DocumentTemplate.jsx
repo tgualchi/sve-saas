@@ -1,5 +1,4 @@
 import React from "react";
-import { QRCodeSVG } from "qrcode.react";
 
 const cardStyle = {
   maxWidth: "900px",
@@ -71,8 +70,6 @@ function getStatus(status) {
 }
 
 function Header({ code }) {
-  const documentUrl = `${window.location.origin}/d/${encodeURIComponent(code)}`;
-
   return (
     <div style={{ textAlign: "center" }}>
       <h2
@@ -87,26 +84,17 @@ function Header({ code }) {
         Validación de Documento Profesional
       </h2>
 
-      <div
-        aria-label={`Código QR para verificar el documento ${code}`}
+      <img
+        src="https://i.ibb.co/zVzzjG4L/Dise-o-sin-t-tulo-6.png"
+        alt="QR"
         style={{
           width: "180px",
-          margin: "0 auto",
           border: "1px solid #e5e7eb",
           borderRadius: "12px",
           padding: "10px",
-          background: "#fff",
-          boxSizing: "border-box"
+          background: "#fff"
         }}
-      >
-        <QRCodeSVG
-          value={documentUrl}
-          size={158}
-          level="H"
-          includeMargin={false}
-          title={`Verificar documento ${code}`}
-        />
-      </div>
+      />
 
       <div
         style={{
