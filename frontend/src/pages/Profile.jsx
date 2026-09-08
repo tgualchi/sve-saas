@@ -15,6 +15,9 @@ export default function Profile() {
     profession: "",
     specialty: "",
     license_number: "",
+    institution: "",
+    cuil: "",
+    professional_code: "",
     email: "",
     phone: "",
     website: "",
@@ -38,6 +41,9 @@ export default function Profile() {
           profession: data.profession || "",
           specialty: data.specialty || "",
           license_number: data.license_number || "",
+          institution: data.institution || "",
+          cuil: data.cuil || "",
+          professional_code: data.professional_code || "",
           email: data.email || user.email || "",
           phone: data.phone || "",
           website: data.website || "",
@@ -133,6 +139,9 @@ export default function Profile() {
         <Field label="Profesión" name="profession" value={form.profession} onChange={handleChange} required />
         <Field label="Especialidad" name="specialty" value={form.specialty} onChange={handleChange} />
         <Field label="Matrícula" name="license_number" value={form.license_number} onChange={handleChange} />
+        <Field label="Institución" name="institution" value={form.institution} onChange={handleChange} />
+        <Field label="CUIL" name="cuil" value={form.cuil} onChange={handleChange} placeholder="Ej.: 20-12345678-3" />
+        <Field label="Código del profesional" name="professional_code" value={form.professional_code} onChange={handleChange} placeholder="Código interno o identificador profesional" />
         <Field label="Email" name="email" value={form.email} onChange={handleChange} />
         <Field label="Teléfono" name="phone" value={form.phone} onChange={handleChange} />
         <Field label="Sitio web" name="website" value={form.website} onChange={handleChange} />
@@ -162,7 +171,7 @@ export default function Profile() {
   );
 }
 
-function Field({ label, name, value, onChange, required }) {
+function Field({ label, name, value, onChange, required, placeholder = "" }) {
   return (
     <label style={{ display: "block", marginBottom: 18 }}>
       <span style={{ display: "block", fontWeight: "bold", marginBottom: 8 }}>
@@ -174,6 +183,7 @@ function Field({ label, name, value, onChange, required }) {
         value={value}
         onChange={onChange}
         required={required}
+        placeholder={placeholder}
         style={{
           width: "100%",
           padding: "12px",
