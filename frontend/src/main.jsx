@@ -76,6 +76,17 @@ function formatValidationDate() {
   }).format(new Date());
 }
 
+function formatPortalDate() {
+  const value = new Intl.DateTimeFormat("es-AR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  }).format(new Date());
+
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
 function formatDate(date) {
   if (!date) return "-";
 
@@ -216,6 +227,12 @@ function App() {
   return (
     <>
       <header className="header">
+        <div className="portalBar">
+          <div className="container portalBarContent">
+            <span>Portal de validación documental profesional</span>
+            <span>{formatPortalDate()}</span>
+          </div>
+        </div>
         <div className="container nav">
           <a href="#inicio" className="brand">
             <div className="logo">SVE</div>
@@ -226,10 +243,11 @@ function App() {
           </a>
 
          <nav>
-  <a href="#validar">Validar</a>
-  <a href="#seguridad">Seguridad</a>
-  <a href="#planes">Planes</a>
-  <a href="#contacto">Contacto</a>
+  <a href="#inicio">INICIO</a>
+  <a href="#validar">VALIDADOR</a>
+  <a href="#seguridad">SEGURIDAD</a>
+  <a href="#planes">SERVICIOS</a>
+  <a href="#contacto">SOPORTE</a>
 
   <Link
     to="/login"
@@ -270,6 +288,14 @@ function App() {
                 <a className="btn secondary" href="#planes">
                   Ver planes
                 </a>
+              </div>
+
+              <div className="institutionalNotice">
+                <strong>Validación pública disponible</strong>
+                <span>
+                  Consulte el estado, profesional emisor y matrícula mediante el
+                  código único incorporado en cada documento.
+                </span>
               </div>
             </div>
 
@@ -484,7 +510,7 @@ function App() {
 
       <footer>
         <div className="container footer">
-          © 2026 SVE · Sistema de Validación Electrónica · v1.1.4
+          © 2026 SVE · Sistema de Validación Electrónica · v1.2.0
         </div>
       </footer>
     </>

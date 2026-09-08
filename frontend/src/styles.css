@@ -183,3 +183,77 @@ footer{margin-top:60px;background:white;border-top:1px solid var(--border)}
     .validationRow{padding:16px 22px}
     .verificationActions{padding:22px}
 }
+
+/* ==========================================================
+   SVE 1.2.0 - interfaz institucional inspirada en portales
+   sanitarios argentinos, con identidad propia de SVE.
+   ========================================================== */
+:root{
+    --bg:#eef2f3;
+    --surface:#ffffff;
+    --surface-2:#f6f8f8;
+    --text:#263a43;
+    --text-light:#60747d;
+    --primary:#087f8c;
+    --primary-dark:#075f6a;
+    --primary-soft:#dceff1;
+    --success:#14854f;
+    --success-soft:#e2f3e9;
+    --border:#cfdadd;
+    --shadow-sm:0 3px 10px rgba(25,54,64,.10);
+    --shadow-md:0 8px 24px rgba(25,54,64,.13);
+    --radius-sm:4px;
+    --radius:6px;
+    --radius-lg:8px;
+}
+
+body{background:#eef2f3;font-family:Arial,Helvetica,sans-serif}
+.header{position:relative;background:#fff;border-bottom:4px solid var(--primary);backdrop-filter:none}
+.portalBar{background:#334f5a;color:#fff;font-size:13px}
+.portalBarContent{min-height:34px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.nav{min-height:92px}
+.logo{width:66px;height:66px;border-radius:4px;background:var(--primary);box-shadow:none;letter-spacing:-.03em}
+.brand strong{font-size:25px;color:#26434d}
+.brand span{color:#687e86;font-weight:400}
+nav{align-self:stretch}
+nav a{display:flex;align-items:center;padding:0 14px;border-radius:0;font-size:13px;color:#38525c;border-bottom:4px solid transparent}
+nav a:hover{background:#eff6f6;color:var(--primary-dark);border-bottom-color:var(--primary)}
+
+.hero{padding:46px 0;background:linear-gradient(120deg,#e7f1f2 0%,#f8faf9 64%,#d9e7e9 100%);border-bottom:1px solid var(--border)}
+.heroGrid{gap:42px}
+.badge,.kicker{border-radius:3px;border:0;border-left:5px solid var(--primary);background:#fff;color:var(--primary-dark);box-shadow:var(--shadow-sm)}
+h1{font-size:clamp(38px,5vw,58px);line-height:1.04;letter-spacing:-.035em;color:#183b47}
+h2{letter-spacing:-.025em;color:#244752}
+.lead{font-size:17px;line-height:1.65}
+.btn{border-radius:4px;min-height:48px}
+.primary{background:var(--primary);box-shadow:none}
+.primary:hover{background:var(--primary-dark);box-shadow:none}
+.secondary{border-color:#9fb4ba}
+.mock{border-radius:6px;padding:28px;background:#2f4b56;box-shadow:var(--shadow-md);border-top:6px solid #22a49e}
+.qr{border-radius:4px}
+.dataRows div{border-radius:3px}
+.institutionalNotice{display:grid;gap:5px;margin-top:28px;padding:17px 20px;background:#fff;border-left:5px solid #d7a72f;box-shadow:var(--shadow-sm)}
+.institutionalNotice strong{color:#36515b}
+.institutionalNotice span{color:var(--text-light);font-size:14px;line-height:1.5}
+
+.section{padding:58px 0}
+.validator{gap:32px}
+.validatorIntro{top:30px}
+.formCard,.verificationCard,.plan,.feature,.contactLinks a{border-radius:5px;box-shadow:var(--shadow-sm)}
+.formCard{border-top:6px solid var(--primary);padding:28px}
+.inputRow input{height:50px;border-radius:3px}
+.verificationIcon{border-radius:50%}
+.dark{background:#304d58}
+.featureGrid{gap:16px}
+.feature{border-radius:4px;border-top:4px solid #54b8b4}
+.pricing{gap:16px}
+.plan{border-top:5px solid var(--primary)}
+.plan.featured{border:1px solid var(--border);border-top:5px solid #d7a72f;transform:none}
+.popular{border-radius:3px;background:#fff4cf;color:#705710;border-color:#e5cb78}
+footer{background:#304d58;border-top:6px solid #1b3944;color:#fff}
+.footer{color:#e4edef;text-align:left}
+
+@media (max-width:768px){
+    .portalBarContent{min-height:42px;font-size:11px}
+    .nav{min-height:76px}
+}
