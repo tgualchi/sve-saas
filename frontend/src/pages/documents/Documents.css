@@ -357,3 +357,19 @@
     }
 
 }
+
+.documents-edit-button{
+    padding:9px 16px;
+    border:1px solid #087f8c;
+    border-radius:5px;
+    background:#fff;
+    color:#087f8c;
+    font-weight:700;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.documents-edit-button:hover{
+    background:#087f8c;
+    color:#fff;
+}

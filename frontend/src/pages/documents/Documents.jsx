@@ -166,6 +166,7 @@ export default function Documents() {
                 <th>Tipo</th>
                 <th>Fecha</th>
                 <th>Estado</th>
+                <th>Acciones</th>
               </tr>
             </thead>
 
@@ -205,6 +206,19 @@ export default function Documents() {
                     >
                       {document.status || "-"}
                     </span>
+                  </td>
+
+                  <td>
+                    <button
+                      type="button"
+                      className="documents-edit-button"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        navigate(`/documents/${document.id}/edit`);
+                      }}
+                    >
+                      Editar
+                    </button>
                   </td>
                 </tr>
               ))}

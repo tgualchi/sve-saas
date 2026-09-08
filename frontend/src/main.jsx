@@ -34,6 +34,7 @@ import NewPatient from "./pages/patients/NewPatient";
 import NewDocument from "./pages/documents/NewDocument";
 import Documents from "./pages/documents/Documents";
 import Document from "./pages/documents/Document";
+import EditDocument from "./pages/documents/EditDocument";
 
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
@@ -510,7 +511,7 @@ function App() {
 
       <footer>
         <div className="container footer">
-          © 2026 SVE · Sistema de Validación Electrónica · v1.2.1
+          © 2026 SVE · Sistema de Validación Electrónica · v1.2.2
         </div>
       </footer>
     </>
@@ -768,6 +769,15 @@ createRoot(document.getElementById("root")).render(
   element={
     <ProtectedRoute>
       <Document />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/documents/:id/edit"
+  element={
+    <ProtectedRoute>
+      <EditDocument />
     </ProtectedRoute>
   }
 />
