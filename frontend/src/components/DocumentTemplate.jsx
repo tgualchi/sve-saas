@@ -2,7 +2,22 @@ import React from "react";
 import { QRCodeSVG } from "qrcode.react";
 
 const VALIDATOR_URL = "https://sve.informespsicologicos.com/";
-const formatDate = (v) => v ? new Date(v).toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" }) : "-";
+function formatDate(value) {
+  if (!value) return "-";
+
+  const dateOnly = String(value).slice(0, 10);
+  const match = dateOnly.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+  if (match) {
+    const [, year, month, day] = match;
+    return `${day}/${month}/${year}`;
+  }
+
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? "-"
+    : date.toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" });
+}
 const formatDateTime = (v) => v ? new Date(v).toLocaleString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "-";
 
 function formatTitle(profession, specialty) {
@@ -16,7 +31,7 @@ function licenseDays(from, to) {
   if (!from || !to) return null;
   const start = new Date(`${String(from).slice(0, 10)}T00:00:00`);
   const end = new Date(`${String(to).slice(0, 10)}T00:00:00`);
-  const days = Math.round((end - start) / 86400000);
+  const days = Math.round((end - start) / 86400000) + 1;
   return Number.isFinite(days) && days >= 0 ? days : null;
 }
 
