@@ -42,7 +42,7 @@ La `SERVICE_ROLE_KEY` es privada. Solo va en Render, nunca en GitHub ni frontend
    - `VITE_API_URL=https://TU-BACKEND.onrender.com`
    - `VITE_PUBLIC_SITE_URL=https://validacion.informespsicologicos.com`
    - `VITE_WHATSAPP_NUMBER=5491124028499`
-   - `VITE_CONTACT_EMAIL=sistemadevalidacionelectronica@gmail.com`
+   - `VITE_CONTACT_EMAIL=sve.atencion@gmail.com`
 
 ## 5. Dominio
 

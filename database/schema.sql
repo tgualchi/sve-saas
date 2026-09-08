@@ -26,7 +26,7 @@ create index if not exists idx_certificates_code on certificates(code);
 create index if not exists idx_certificates_status on certificates(status);
 
 insert into organizations (name, email, phone, plan)
-values ('InformesPsicologicos.com', 'sistemadevalidacionelectronica@gmail.com', '+54 9 11 2402-8499', 'clinic')
+values ('SVE.InformesPsicologicos.com', 'sve.atencion@gmail.com', '+54 9 11 2402-8499', 'clinic')
 on conflict do nothing;
 
 insert into certificates (code, status, issuer, holder_name, issued_at, document_url)
