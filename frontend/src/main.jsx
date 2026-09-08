@@ -510,7 +510,7 @@ function App() {
 
       <footer>
         <div className="container footer">
-          © 2026 SVE · Sistema de Validación Electrónica · v1.2.0
+          © 2026 SVE · Sistema de Validación Electrónica · v1.2.1
         </div>
       </footer>
     </>
