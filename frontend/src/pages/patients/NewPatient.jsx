@@ -13,6 +13,10 @@ export default function NewPatient() {
     full_name: "",
     dni: "",
     birth_date: "",
+    sex: "",
+    health_coverage: "",
+    health_plan: "",
+    credential_number: "",
     phone: "",
     email: ""
   });
@@ -78,6 +82,10 @@ export default function NewPatient() {
           full_name: form.full_name.trim(),
           dni: form.dni.trim(),
           birth_date: form.birth_date || null,
+          sex: form.sex || null,
+          health_coverage: form.health_coverage.trim() || null,
+          health_plan: form.health_plan.trim() || null,
+          credential_number: form.credential_number.trim() || null,
           phone: form.phone.trim(),
           email: form.email.trim()
         });
@@ -147,6 +155,36 @@ export default function NewPatient() {
           onChange={handleChange}
         />
 
+        <SelectField
+          label="Sexo"
+          name="sex"
+          value={form.sex}
+          onChange={handleChange}
+          options={["", "Femenino", "Masculino", "No binario", "Prefiere no informar"]}
+        />
+
+        <Field
+          label="Cobertura de salud"
+          name="health_coverage"
+          value={form.health_coverage}
+          onChange={handleChange}
+          placeholder="Ej.: Particular, obra social o prepaga"
+        />
+
+        <Field
+          label="Plan"
+          name="health_plan"
+          value={form.health_plan}
+          onChange={handleChange}
+        />
+
+        <Field
+          label="Número de credencial"
+          name="credential_number"
+          value={form.credential_number}
+          onChange={handleChange}
+        />
+
         <Field
           label="Teléfono"
           name="phone"
@@ -211,7 +249,8 @@ function Field({
   value,
   onChange,
   required,
-  type = "text"
+  type = "text",
+  placeholder = ""
 }) {
   return (
     <div style={{ marginBottom: "20px" }}>
@@ -231,6 +270,7 @@ function Field({
         value={value}
         onChange={onChange}
         required={required}
+        placeholder={placeholder}
         style={{
           width: "100%",
           padding: "12px",
@@ -239,6 +279,17 @@ function Field({
           boxSizing: "border-box"
         }}
       />
+    </div>
+  );
+}
+
+function SelectField({ label, name, value, onChange, options }) {
+  return (
+    <div style={{ marginBottom: "20px" }}>
+      <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>{label}</label>
+      <select name={name} value={value} onChange={onChange} style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #d1d5db", boxSizing: "border-box", background: "#fff" }}>
+        {options.map((option) => <option key={option || "empty"} value={option}>{option || "Seleccionar"}</option>)}
+      </select>
     </div>
   );
 }
