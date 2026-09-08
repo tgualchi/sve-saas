@@ -41,7 +41,7 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 const WHATSAPP = import.meta.env.VITE_WHATSAPP_NUMBER || "5491124028499";
 const CONTACT_EMAIL =
   import.meta.env.VITE_CONTACT_EMAIL ||
-  "sistemadevalidacionelectronica@gmail.com";
+  "sve.atencion@gmail.com";
 
 const PUBLIC_CODE_PATTERN = /^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/;
 
@@ -278,8 +278,8 @@ function App() {
 
               <p className="lead">
                 SVE permite verificar certificados, informes y constancias mediante
-                código QR o código único, sin exponer datos sensibles del titular ni
-                datos profesionales en la validación pública.
+                código QR o código único validado por REFEPS y ReNaPDiS, sin exponer datos sensibles del titular ni
+                datos profesionales en la validación pública-
               </p>
 
               <div className="actions">
@@ -406,7 +406,7 @@ function App() {
         <section id="seguridad" className="section dark">
           <div className="container">
             <p className="kicker">Seguridad</p>
-            <h2>Diseñado para reducir falsificaciones y proteger datos sensibles.</h2>
+            <h2>Diseñado para reducir falsificaciones y proteger datos sensibles validado por REFEPS y ReNaPDiS .</h2>
 
             <div className="featureGrid">
               <Feature
@@ -528,7 +528,7 @@ function VerifiedDocumentCard({ certificate, onReset }) {
 
         <div>
           <p className="eyebrow">Documento auténtico</p>
-          <h3>Este documento fue verificado correctamente por SVE.</h3>
+          <h3>Este documento fue verificado correctamente por SVE / REFEPS y ReNaPDiS.</h3>
         </div>
       </div>
 
