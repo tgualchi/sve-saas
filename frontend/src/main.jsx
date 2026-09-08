@@ -39,10 +39,7 @@ import EditDocument from "./pages/documents/EditDocument";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 const WHATSAPP = import.meta.env.VITE_WHATSAPP_NUMBER || "5491124028499";
-const CONTACT_EMAIL =
-  import.meta.env.VITE_CONTACT_EMAIL ||
-  "sve.atencion@gmail.com";
-
+const CONTACT_EMAIL = "sve.atencion@gmail.com";
 const PUBLIC_CODE_PATTERN = /^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/;
 
 function normalizeCode(value) {
