@@ -279,7 +279,11 @@ app.get("/api/documents/public/:code", async (req, res) => {
             fullName: patient.full_name,
             dni: patient.dni,
             birthDate: patient.birth_date,
-            age: calculateAge(patient.birth_date)
+            age: calculateAge(patient.birth_date),
+            sex: patient.sex || "",
+            healthCoverage: patient.health_coverage || "",
+            healthPlan: patient.health_plan || "",
+            credentialNumber: patient.credential_number || ""
           }
         : null,
       document: {
@@ -336,7 +340,11 @@ app.get("/api/documents/public/:code", async (req, res) => {
       fullName: data.patient_full_name || data.holder_name || "",
       dni: data.patient_dni || "",
       birthDate: data.patient_birth_date || "",
-      age: data.patient_age || ""
+      age: data.patient_age || "",
+      sex: data.patient_sex || "",
+      healthCoverage: data.patient_health_coverage || "",
+      healthPlan: data.patient_health_plan || "",
+      credentialNumber: data.patient_credential_number || ""
     },
     document: {
       type: data.document_type || "",
