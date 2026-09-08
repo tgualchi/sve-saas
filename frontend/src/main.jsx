@@ -146,7 +146,7 @@ function App() {
           status: data.status,
           issuer: data.issuer,
           licenseNumber: data.licenseNumber,
-          verifiedBy: "Sistema de Validación Electrónica",
+          verifiedBy: "SVE, REFEPS y ReNaPDiS",
           validatedAt: formatValidationDate(),
           documentUrl: data.documentUrl
         }
@@ -176,7 +176,7 @@ function App() {
         status: data.status,
         issuer: data.issuer,
         licenseNumber: data.licenseNumber,
-        verifiedBy: "Sistema de Validación Electrónica",
+        verifiedBy: "SVE, REFEPS y ReNaPDiS",
         validatedAt: formatValidationDate(),
         documentUrl: data.documentUrl
       }
@@ -637,7 +637,7 @@ function InvalidDocumentCard({ validation, onReset }) {
       <div className="verificationGrid">
         <ValidationRow label="Código ingresado" value={validation.code} />
         <ValidationRow label="Estado" value="NO VALIDADO" danger />
-        <ValidationRow label="Verificado por" value="Sistema de Validación Electrónica" />
+        <ValidationRow label="Verificado por" value="validado por REFEPS y ReNaPDiS" />
         <ValidationRow
           label="Fecha y hora de validación"
           value={validation.validatedAt}
