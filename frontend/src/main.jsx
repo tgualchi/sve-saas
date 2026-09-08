@@ -320,7 +320,7 @@ function App() {
 
                 <div>
                   <span>Verificado por</span>
-                  <strong>SVE</strong>
+                  <strong>Sistema de Validación Electrónica (SVE)</strong>
                 </div>
               </div>
             </div>
