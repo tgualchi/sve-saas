@@ -238,6 +238,8 @@ app.get("/api/documents/public/:code", async (req, res) => {
       legacyCode: null,
       status: normalizeStatus(document.status),
       issuedAt: document.issued_at,
+      createdAt: document.created_at || null,
+      pdfUrl: document.pdf_url || document.document_url || null,
       professional: professional
         ? {
             id: professional.id,
@@ -290,6 +292,8 @@ app.get("/api/documents/public/:code", async (req, res) => {
     legacyCode: data.code,
     status: normalizeStatus(data.status),
     issuedAt: data.issued_at,
+    createdAt: data.created_at || null,
+    pdfUrl: data.document_url || null,
     documentUrl: data.document_url || null,
     professional: data.professional
       ? {

@@ -13,12 +13,18 @@ const cardStyle = {
 };
 
 const sectionStyle = {
-  marginTop: "25px"
+  marginTop: "34px"
 };
 
 const sectionTitleStyle = {
   borderBottom: "1px solid #ddd",
-  paddingBottom: "8px"
+  paddingBottom: "10px",
+  marginBottom: "18px"
+};
+
+const sectionContentStyle = {
+  marginTop: 0,
+  lineHeight: 1.65
 };
 
 function formatDate(date) {
@@ -29,6 +35,41 @@ function formatDate(date) {
     month: "2-digit",
     year: "numeric"
   });
+}
+
+function formatDateTime(date) {
+  if (!date) return "-";
+
+  const value = new Date(date);
+
+  if (Number.isNaN(value.getTime())) return formatDate(date);
+
+  return value.toLocaleString("es-AR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
+function formatProfessionalTitle(profession, specialty) {
+  const normalize = (value) => String(value || "")
+    .trim()
+    .replace(/\bmedico\b/gi, "MÉDICO")
+    .replace(/\bpsicologo\b/gi, "PSICÓLOGO")
+    .replace(/\bpsiquiatria\b/gi, "PSIQUIATRA")
+    .toUpperCase();
+
+  const normalizedProfession = normalize(profession);
+  const normalizedSpecialty = normalize(specialty);
+
+  if (!normalizedSpecialty) return normalizedProfession;
+  if (!normalizedProfession || normalizedSpecialty.includes(normalizedProfession)) {
+    return normalizedSpecialty;
+  }
+
+  return `${normalizedProfession} ${normalizedSpecialty}`;
 }
 
 function getStatus(status) {
@@ -172,6 +213,11 @@ export default function DocumentTemplate({ documentData }) {
 
   const status = getStatus(documentData?.status);
   const isValid = String(documentData?.status).toLowerCase() === "valid";
+  const professionalTitle = formatProfessionalTitle(
+    professional.profession,
+    professional.specialty
+  );
+  const emissionDate = documentData.createdAt || documentData.issuedAt;
 
   return (
     <div style={cardStyle}>
@@ -199,13 +245,13 @@ export default function DocumentTemplate({ documentData }) {
             Profesional Responsable
           </h3>
 
-          <p>
+          <p style={sectionContentStyle}>
 
-            <strong>{professional.fullName}</strong>
+            <strong>{professional.fullName?.toUpperCase() || "-"}</strong>
 
             <br />
 
-            {professional.profession}
+            {professionalTitle || "-"}
 
             <br />
 
@@ -226,7 +272,7 @@ export default function DocumentTemplate({ documentData }) {
             Datos del Paciente
           </h3>
 
-          <p>
+          <p style={sectionContentStyle}>
 
             <strong>Nombre:</strong> {patient.fullName || "-"}
 
@@ -255,14 +301,14 @@ export default function DocumentTemplate({ documentData }) {
           Datos del Informe o Certificado
         </h3>
 
-        <p>
+        <p style={sectionContentStyle}>
 
           <strong>Código:</strong> {documentData.code}
 
           <br />
 
-          <strong>Fecha de emisión:</strong>{" "}
-          {formatDate(documentData.issuedAt)}
+          <strong>Fecha y hora de emisión:</strong>{" "}
+          {formatDateTime(emissionDate)}
 
           <br />
 
@@ -279,7 +325,7 @@ export default function DocumentTemplate({ documentData }) {
           Tipo de Documento
         </h3>
 
-        <p>
+        <p style={sectionContentStyle}>
 
           <strong>
             {documentInfo.type || "-"}
@@ -325,7 +371,7 @@ export default function DocumentTemplate({ documentData }) {
           Diagnóstico (CIE-10)
         </h3>
 
-        <p>
+        <p style={sectionContentStyle}>
 
           {documentInfo.diagnosis || "-"}
 
@@ -339,12 +385,100 @@ export default function DocumentTemplate({ documentData }) {
           Tratamiento Farmacológico
         </h3>
 
-        <p>
+        <p style={sectionContentStyle}>
 
           {documentInfo.treatment || "-"}
 
         </p>
 
+      </div>
+
+      <div style={sectionStyle}>
+        <h3 style={sectionTitleStyle}>
+          Indicaciones del Profesional
+        </h3>
+
+        <p style={sectionContentStyle}>
+          {documentInfo.observations || "-"}
+        </p>
+      </div>
+
+      <div
+        style={{
+          ...sectionStyle,
+          textAlign: "center",
+          paddingTop: "12px"
+        }}
+      >
+        {professional.signatureUrl ? (
+          <img
+            src={professional.signatureUrl}
+            alt={`Firma de ${professional.fullName || "profesional"}`}
+            style={{
+              display: "block",
+              maxWidth: "220px",
+              maxHeight: "100px",
+              objectFit: "contain",
+              margin: "0 auto 8px"
+            }}
+          />
+        ) : (
+          <div style={{ color: "#9ca3af", marginBottom: "12px" }}>
+            Firma profesional no registrada
+          </div>
+        )}
+
+        <div style={{ borderTop: "1px solid #374151", maxWidth: "300px", margin: "0 auto", paddingTop: "8px" }}>
+          <strong>{professional.fullName?.toUpperCase() || "PROFESIONAL RESPONSABLE"}</strong>
+          <br />
+          <span>{professionalTitle || "-"}</span>
+          <br />
+          <span>{professional.licenseNumber || "-"}</span>
+        </div>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "12px",
+          flexWrap: "wrap",
+          marginTop: "30px"
+        }}
+      >
+        {documentData.pdfUrl && (
+          <a
+            href={documentData.pdfUrl}
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              padding: "12px 18px",
+              borderRadius: "8px",
+              background: "#2563eb",
+              color: "#fff",
+              textDecoration: "none",
+              fontWeight: 700
+            }}
+          >
+            Abrir informe PDF
+          </a>
+        )}
+
+        <button
+          type="button"
+          onClick={() => window.print()}
+          style={{
+            padding: "12px 18px",
+            borderRadius: "8px",
+            border: "1px solid #d1d5db",
+            background: "#fff",
+            color: "#1f2937",
+            cursor: "pointer",
+            fontWeight: 700
+          }}
+        >
+          Imprimir o guardar como PDF
+        </button>
       </div>
             <div
         style={{

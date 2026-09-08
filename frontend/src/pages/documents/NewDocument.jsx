@@ -230,7 +230,7 @@ export default function NewDocument() {
         />
 
         <FieldArea
-          label="Observaciones"
+          label="Indicaciones del profesional"
           name="observations"
           value={form.observations}
           onChange={handleChange}
