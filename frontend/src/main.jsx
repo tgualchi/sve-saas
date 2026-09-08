@@ -86,6 +86,12 @@ function formatDate(date) {
   });
 }
 
+function formatIssuer(issuer) {
+  const name = String(issuer || "").trim();
+  if (!name) return "-";
+  return /^(dr\.?|dra\.?)\s/i.test(name) ? name : `Dr. ${name}`;
+}
+
 function App() {
   const [code, setCode] = useState("");
   const [validation, setValidation] = useState(null);
@@ -130,6 +136,7 @@ function App() {
           code: data.code,
           status: data.status,
           issuer: data.issuer,
+          licenseNumber: data.licenseNumber,
           verifiedBy: "Sistema de Validación Electrónica",
           validatedAt: formatValidationDate(),
           documentUrl: data.documentUrl
@@ -159,6 +166,7 @@ function App() {
         code: data.code,
         status: data.status,
         issuer: data.issuer,
+        licenseNumber: data.licenseNumber,
         verifiedBy: "Sistema de Validación Electrónica",
         validatedAt: formatValidationDate(),
         documentUrl: data.documentUrl
@@ -302,8 +310,8 @@ function App() {
               <h2>Ingrese el código del documento</h2>
               <p className="muted">
                 La validación pública confirma la autenticidad del documento sin
-                mostrar nombre del paciente, DNI, profesional, matrícula, diagnóstico
-                ni contenido clínico. Esa información solo aparece dentro del documento original.
+                mostrar nombre del paciente, DNI, diagnóstico ni contenido clínico.
+                Solo identifica al profesional emisor y su matrícula.
               </p>
             </div>
 
@@ -476,7 +484,7 @@ function App() {
 
       <footer>
         <div className="container footer">
-          © 2026 SVE · Sistema de Validación Electrónica · v1.1.3
+          © 2026 SVE · Sistema de Validación Electrónica · v1.1.4
         </div>
       </footer>
     </>
@@ -500,7 +508,8 @@ function VerifiedDocumentCard({ certificate, onReset }) {
       <div className="verificationGrid">
         <ValidationRow label="Código" value={certificate.code} />
         <ValidationRow label="Estado" value={certificate.status} highlight />
-        <ValidationRow label="Emitido por" value={certificate.issuer} />
+        <ValidationRow label="Emitido por" value={formatIssuer(certificate.issuer)} />
+        <ValidationRow label="Matrícula" value={certificate.licenseNumber || "-"} />
         <ValidationRow label="Verificado por" value={certificate.verifiedBy} />
         <ValidationRow
           label="Fecha y hora de validación"
@@ -509,8 +518,8 @@ function VerifiedDocumentCard({ certificate, onReset }) {
       </div>
 
       <div className="privacyNotice">
-        La validación pública no muestra datos del paciente, profesional, matrícula,
-        diagnóstico ni contenido del documento.
+        La validación pública identifica al profesional emisor y su matrícula,
+        sin mostrar datos del paciente, diagnóstico ni contenido clínico.
       </div>
 
       <div className="verificationActions">
@@ -555,7 +564,8 @@ function SpecialStatusDocumentCard({ certificate, onReset }) {
       <div className="verificationGrid">
         <ValidationRow label="Código" value={certificate.code} />
         <ValidationRow label="Estado" value={statusLabel} danger />
-        <ValidationRow label="Emitido por" value={certificate.issuer} />
+        <ValidationRow label="Emitido por" value={formatIssuer(certificate.issuer)} />
+        <ValidationRow label="Matrícula" value={certificate.licenseNumber || "-"} />
         <ValidationRow label="Verificado por" value={certificate.verifiedBy} />
         <ValidationRow label="Fecha y hora de validación" value={certificate.validatedAt} />
       </div>
@@ -565,8 +575,8 @@ function SpecialStatusDocumentCard({ certificate, onReset }) {
       </p>
 
       <div className="privacyNotice">
-        La validación pública no muestra datos del paciente, profesional, matrícula,
-        diagnóstico ni contenido del documento.
+        La validación pública identifica al profesional emisor y su matrícula,
+        sin mostrar datos del paciente, diagnóstico ni contenido clínico.
       </div>
 
       <div className="verificationActions">

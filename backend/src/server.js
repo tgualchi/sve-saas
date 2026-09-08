@@ -101,7 +101,14 @@ function isValidStatus(status) {
   return normalizeStatus(status) === "valid";
 }
 
-function publicValidationResponse({ code, legacyCode = null, status, issuer, issuedAt }) {
+function publicValidationResponse({
+  code,
+  legacyCode = null,
+  status,
+  issuer,
+  licenseNumber = null,
+  issuedAt
+}) {
   const normalizedStatus = normalizeStatus(status);
 
   return {
@@ -111,6 +118,7 @@ function publicValidationResponse({ code, legacyCode = null, status, issuer, iss
     legacyCode,
     status: normalizedStatus,
     issuer: issuer || "InformesPsicologicos.com",
+    licenseNumber: licenseNumber || null,
     issuedAt: issuedAt || null,
     documentUrl: `/d/${encodeURIComponent(code)}`
   };
@@ -166,7 +174,7 @@ app.post("/api/validate", async (req, res) => {
       public_code,
       status,
       issued_at,
-      professional:professionals(full_name)
+      professional:professionals(full_name,license_number)
     `)
     .eq("public_code", code)
     .maybeSingle();
@@ -180,6 +188,7 @@ app.post("/api/validate", async (req, res) => {
         code: document.public_code,
         status: document.status,
         issuer: professional?.full_name,
+        licenseNumber: professional?.license_number,
         issuedAt: document.issued_at
       })
     );
@@ -194,7 +203,14 @@ app.post("/api/validate", async (req, res) => {
 
   const { data, error } = await supabase
     .from("certificates")
-    .select("public_code,code,status,issuer,issued_at")
+    .select(`
+      public_code,
+      code,
+      status,
+      issuer,
+      issued_at,
+      professional:professionals(full_name,license_number)
+    `)
     .or(`public_code.eq.${code},code.eq.${code}`)
     .maybeSingle();
 
@@ -209,7 +225,8 @@ app.post("/api/validate", async (req, res) => {
       code: data.public_code || data.code,
       legacyCode: data.code,
       status: data.status,
-      issuer: data.issuer,
+      issuer: data.professional?.full_name || data.issuer,
+      licenseNumber: data.professional?.license_number,
       issuedAt: data.issued_at
     })
   );

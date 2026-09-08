@@ -112,7 +112,7 @@ function getStatus(status) {
 }
 
 function Header({ code }) {
-  const documentUrl = `${window.location.origin}/d/${encodeURIComponent(code)}`;
+  const validationUrl = "https://sve.informespsicologicos.com/";
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -141,11 +141,11 @@ function Header({ code }) {
         }}
       >
         <QRCodeSVG
-          value={documentUrl}
+          value={validationUrl}
           size={158}
           level="H"
           includeMargin={false}
-          title={`Verificar documento ${code}`}
+          title={`Ir al validador SVE para verificar ${code}`}
         />
       </div>
 
