@@ -174,7 +174,7 @@ export default function Documents() {
               {filteredDocuments.map((document) => (
                 <tr
                   key={document.id}
-                  onClick={() => navigate(`/documents/${document.id}`)}
+                  onClick={() => navigate(`/d/${document.public_code}`)}
                 >
                   <td className="documents-code">
                     {document.public_code}
